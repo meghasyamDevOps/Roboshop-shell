@@ -26,14 +26,18 @@ echo -e "\e[36m>>>>>>>>>> download the dependencies <<<<<<<<<<\e[0m"
 cd /app
 npm install
 
+echo -e "\e[36m>>>>>>>>>> Load the service <<<<<<<<<<\e[0m"
+systemctl enable catalogue
+systemctl start catalogue
+
 echo -e "\e[36m>>>>>>>>>> Copy Mongo Repo File <<<<<<<<<<\e[0m"
 cp /home/ec2-user/Roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo
 
-echo -e "\e[36m>>>>>>>>>> Insatll mongodb <<<<<<<<<<\e[0m"
-dnf install mongodb-org-shell -y
+echo -e "\e[36m>>>>>>>>>> Insatll mongodb Client <<<<<<<<<<\e[0m"
+dnf install mongodb-mongosh -y
+
+echo -e "\e[36m>>>>>>>>>> Load schema <<<<<<<<<<\e[0m"
 mongo --host mongodb-dev.meghadevops.site </app/schema/catalogue.js
 
-echo -e "\e[36m>>>>>>>>>> Load the service <<<<<<<<<<\e[0m"
-systemctl daemon-reload
-systemctl enable catalogue
+echo -e "\e[36m>>>>>>>>>> Restart catalogue <<<<<<<<<<\e[0m"
 systemctl restart catalogue
