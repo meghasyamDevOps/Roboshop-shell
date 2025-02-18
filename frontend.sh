@@ -6,7 +6,7 @@ systemctl enable nginx
 systemctl start nginx
 
 echo -e "\e[36m>>>>>>>>>> Copy Roboshop Config File<<<<<<<<<<\e[0m"
-cp /home/centos/Roboshop-shell/roboshop.conf /etc/nginx/default.d/roboshop.conf
+cp /home/ec2-user/Roboshop-shell/roboshop.conf /etc/nginx/default.d/roboshop.conf
 
 echo -e "\e[36m>>>>>>>>>> Download frontend Artifact<<<<<<<<<<\e[0m"
 rm -rf /usr/share/nginx/html/*
