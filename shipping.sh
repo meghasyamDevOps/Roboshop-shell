@@ -30,3 +30,15 @@ systemctl restart shipping
 
 echo -e "\e[35m>>>>>>>>>> Install MySQL Servere <<<<<<<<<<\e[0m"
 dnf install mysql -y
+
+echo -e "\e[35m>>>>>>>>>> Load Schema <<<<<<<<<<\e[0m"
+mysql -h mysql-dev.meghadevops.site -uroot -pRoboShop@1 < /app/db/schema.sql
+
+echo -e "\e[35m>>>>>>>>>> Create app user <<<<<<<<<<\e[0m"
+mysql -h mysql-dev.meghadevops.site -uroot -pRoboShop@1 < /app/db/app-user.sql
+
+echo -e "\e[35m>>>>>>>>>> Load Master Data <<<<<<<<<<\e[0m"
+mysql -h mysql-dev.meghadevops.site -uroot -pRoboShop@1 < /app/db/master-data.sql
+
+echo -e "\e[35m>>>>>>>>>> Restart the service <<<<<<<<<<\e[0m"
+systemctl restart shipping
