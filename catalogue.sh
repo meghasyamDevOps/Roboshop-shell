@@ -1,34 +1,10 @@
-echo -e "\e[36m>>>>>>>>>> Enable nodejs Version <<<<<<<<<<\e[0m"
-dnf module disable nodejs -y
-dnf module enable nodejs:20 -y
+script=$(realpath "$0")
+script_path=$(dirname "$script")
+source ${script_path}/common.sh
 
-echo -e "\e[36m>>>>>>>>>> Install nodejs <<<<<<<<<<\e[0m"
-dnf install nodejs -y
+component=catalogue
 
-echo -e "\e[36m>>>>>>>>>> Add application User <<<<<<<<<<\e[0m"
-useradd roboshop
-
-echo -e "\e[36m>>>>>>>>>> Copy Service File <<<<<<<<<<\e[0m"
-cp /home/ec2-user/Roboshop-shell/catalogue.service /etc/systemd/system/catalogue.service
-
-echo -e "\e[36m>>>>>>>>>> Setup an app Directory <<<<<<<<<<\e[0m"
-rm -rf /app
-mkdir /app
-
-echo -e "\e[36m>>>>>>>>>> Download the application code <<<<<<<<<<\e[0m"
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue.zip
-
-echo -e "\e[36m>>>>>>>>>> Unzip the application code <<<<<<<<<<\e[0m"
-cd /app
-unzip /tmp/catalogue.zip
-
-echo -e "\e[36m>>>>>>>>>> download the dependencies <<<<<<<<<<\e[0m"
-cd /app
-npm install
-
-echo -e "\e[36m>>>>>>>>>> Load the service <<<<<<<<<<\e[0m"
-systemctl enable catalogue
-systemctl start catalogue
+func_nodejs
 
 echo -e "\e[36m>>>>>>>>>> Copy Mongo Repo File <<<<<<<<<<\e[0m"
 cp /home/ec2-user/Roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo
