@@ -6,6 +6,22 @@ print_head() {
   echo -e "\e[35m>>>>>>>>>> $1 <<<<<<<<<<\e[0m"
 }
 
+schema_setup() {
+  if [ "$schema_setup" == "mongo" ]; then
+      print_head "Copy Mongo Repo File"
+      cp ${script_path}/mongo.repo /etc/yum.repos.d/mongo.repo
+
+      print_head "Insatll mongodb Client"
+      dnf install mongodb-mongosh -y
+
+      print_head "Load schema"
+      mongosh --host mongodb-dev.meghadevops.site </app/db/master-data.js
+
+      print_head "Restart catalogue"
+      systemctl restart catalogue
+  fi
+}
+
 func_nodejs() {
     print_head "Enable 20 version and install list"
     dnf module disable nodejs -y
@@ -39,4 +55,6 @@ func_nodejs() {
     print_head "Restart the service"
     systemctl enable ${component}
     systemctl restart ${component}
+
+    schema_setup
 }
