@@ -18,7 +18,7 @@ func_nodejs() {
     useradd ${app_user}
 
     print_head "Copy user service file"
-    cp /home/ec2-user/Roboshop-shell/${component}.service /etc/systemd/system/${component}.service
+    cp ${script_path}/${component}.service /etc/systemd/system/${component}.service
 
     print_head "setup an app directory"
     rm -rf /app
