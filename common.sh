@@ -17,7 +17,7 @@ func_schema_setup() {
       print_head "Load schema"
       mongosh --host mongodb-dev.meghadevops.site </app/db/master-data.js
 
-      print_head "Restart catalogue"
+      print_head "Restart ${component}"
       systemctl restart ${component}
   fi
 
@@ -69,7 +69,7 @@ func_load_service(){
 }
 
 func_nodejs() {
-    print_head "Enable 20 version and install list"
+    print_head "Enable the version and install list"
     dnf module disable nodejs -y
     dnf module enable nodejs:20 -y
 
