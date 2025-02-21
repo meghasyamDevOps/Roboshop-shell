@@ -1,8 +1,5 @@
-script=$(realpath "$0")
-script_path=$(dirname "$script")
-
 echo -e "\e[36m>>>>>>>>>> Copy Mongo Repo File <<<<<<<<<<\e[0m"
-cp ${script_path}/mongo.repo /etc/yum.repos.d/mongo.repo
+cp /home/ec-2user/Roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo
 
 echo -e "\e[36m>>>>>>>>>> Install MonogoDB <<<<<<<<<<\e[0m"
 dnf install mongodb-org -y
