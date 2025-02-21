@@ -1,5 +1,18 @@
 script=$(realpath "$0")
 script_path=$(dirname "$script")
-source ${script_path}/common.sh
 
-func_mongodb
+echo -e "\e[36m>>>>>>>>>> Copy Mongo Repo File <<<<<<<<<<\e[0m"
+cp ${script_path}/mongo.repo /etc/yum.repos.d/mongo.repo
+
+echo -e "\e[36m>>>>>>>>>> Install MonogoDB <<<<<<<<<<\e[0m"
+dnf install mongodb-org -y
+
+echo -e "\e[36m>>>>>>>>>> Enable Mongodb <<<<<<<<<<\e[0m"
+systemctl enable mongod
+systemctl start mongod
+
+echo -e "\e[36m>>>>>>>>>> Chage the mongodb Listen Address <<<<<<<<<<\e[0m"
+sed -i -e 's|127.0.0.1|0.0.0.0|' /etc/mongod.conf
+
+echo -e "\e[36m>>>>>>>>>> Restart Mongodb <<<<<<<<<<\e[0m"
+systemctl restart mongod

@@ -213,26 +213,3 @@ func_java() {
 
   func_schema_setup
 }
-
-func_mongodb() {
-  print_head "Copy Mongo Repo File"
-  cp ${script_path}/mongo.repo /etc/yum.repos.d/mongo.repo
-  func_status_check $?
-
-  print_head "Install MonogoDB"
-  dnf install mongodb-org -y
-  func_status_check $?
-
-  print_head "Enable Mongodb"
-  systemctl enable mongod
-  systemctl start mongod
-  func_status_check $?
-
-  print_head "Chage the mongodb Listen Address"
-  sed -i -e 's|127.0.0.1|0.0.0.0|' /etc/mongod.conf
-  func_status_check $?
-
-  print_head "Restart Mongodb"
-  systemctl restart mongod
-  func_status_check $?
-}
