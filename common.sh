@@ -41,7 +41,10 @@ func_schema_setup() {
 
 func_app_prereq() {
   print_head "Add application User"
-  useradd ${app_user}
+  id ${app_user}
+  if [ $? -ne 0 ]; then
+      useradd ${app_user}
+  fi
 
   print_head "Copy user service file"
   cp ${script_path}/${component}.service /etc/systemd/system/${component}.service
