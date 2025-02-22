@@ -1,15 +1,24 @@
-echo -e "\e[36m>>>>>>>>>> Copy Mongo Repo File <<<<<<<<<<\e[0m"
-cp /home/ec2-user/Roboshop-shell/mongo.repo /etc/yum.repos.d/mongo.repo
+script=$(realpath "$0")
+script_path=$(dirname "$script")
+source ${script_path}/common.sh
 
-echo -e "\e[36m>>>>>>>>>> Install MonogoDB <<<<<<<<<<\e[0m"
-dnf install mongodb-org -y
+print_head "Copy Mongo Repo File"
+cp ${script_path}/mongo.repo /etc/yum.repos.d/mongo.repo &>>$log_file
+func_status_check $?
 
-echo -e "\e[36m>>>>>>>>>> Enable Mongodb <<<<<<<<<<\e[0m"
-systemctl enable mongod
-systemctl start mongod
+print_head "Install MonogoDB"
+dnf install mongodb-org -y &>>$log_file
+func_status_check $?
 
-echo -e "\e[36m>>>>>>>>>> Chage the mongodb Listen Address <<<<<<<<<<\e[0m"
-sed -i -e 's|127.0.0.1|0.0.0.0|' /etc/mongod.conf
+print_head "Enable & Start Mongodb"
+systemctl enable mongod &>>$log_file
+systemctl start mongod &>>$log_file
+func_status_check $?
 
-echo -e "\e[36m>>>>>>>>>> Restart Mongodb <<<<<<<<<<\e[0m"
-systemctl restart mongod
+print_head "Chage the mongodb Listen Address"
+sed -i -e 's|127.0.0.1|0.0.0.0|' /etc/mongod.conf &>>$log_file
+func_status_check $?
+
+print_head "Restart Mongodb"
+systemctl restart mongod &>>$log_file
+func_status_check $?
