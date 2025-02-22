@@ -51,15 +51,15 @@ func_schema_setup() {
       func_status_check $?
 
       print_head "Load Schema"
-      mysql -h mysql-dev.meghadevops.site -uroot -pRoboShop@1 < /app/db/schema.sql &>>$log_file
+      mysql -h mysql-dev.meghadevops.site -uroot -p$mysql_root_password < /app/db/schema.sql &>>$log_file
       func_status_check $?
 
       print_head "Create app user"
-      mysql -h mysql-dev.meghadevops.site -uroot -pRoboShop@1 < /app/db/app-user.sql &>>$log_file
+      mysql -h mysql-dev.meghadevops.site -uroot -p$mysql_root_password < /app/db/app-user.sql &>>$log_file
       func_status_check $?
 
       print_head "Load Master Data"
-      mysql -h mysql-dev.meghadevops.site -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$log_file
+      mysql -h mysql-dev.meghadevops.site -uroot -p$mysql_root_password < /app/db/master-data.sql &>>$log_file
       func_status_check $?
 
       print_head "Restart the service"
