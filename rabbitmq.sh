@@ -1,13 +1,27 @@
-echo -e "\e[35m>>>>>>>>>> Copy Repo File <<<<<<<<<<\e[0m"
-cp /home/ec2-user/Roboshop-shell/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
+script=$(realpath "$0")
+script_path=$(dirname "$script")
+source ${script_path}/common.sh
+rabbitmq_appuser_password=$1
 
-echo -e "\e[35m>>>>>>>>>> Install RabbitMQ Server <<<<<<<<<<\e[0m"
-dnf install rabbitmq-server -y
+if [ -z "$rabbitmq_appuser_password" ]; then
+  echo Input MySQL Root password missing
+  exit 1
+fi
 
-echo -e "\e[35m>>>>>>>>>> Start RabbitMQ Service <<<<<<<<<<\e[0m"
-systemctl enable rabbitmq-server
-systemctl start rabbitmq-server
+print_head "Copy Repo File"
+cp ${script_path}/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo &>>$log_file
+func_status_check $?
 
-echo -e "\e[35m>>>>>>>>>> Create one user for the application <<<<<<<<<<\e[0m"
-rabbitmqctl add_user roboshop roboshop123
-rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
+print_head "Install RabbitMQ Server"
+dnf install rabbitmq-server -y &>>$log_file
+func_status_check $?
+
+print_head "Start RabbitMQ Service"
+systemctl enable rabbitmq-server &>>$log_file
+systemctl start rabbitmq-server &>>$log_file
+func_status_check $?
+
+print_head "Create one user for the application"
+rabbitmqctl add_user roboshop $rabbitmq_appuser_password &>>$log_file
+rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>$log_file
+func_status_check $?
